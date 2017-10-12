@@ -1,0 +1,2 @@
+f = toCnf $ (Var "x") :/\: (Not (Var "x"))
+dpp $ f
