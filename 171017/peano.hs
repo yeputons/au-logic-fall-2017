@@ -1,4 +1,4 @@
-module Peano (intToPeano, peanoToInt, eq, add, mul) where
+module Peano (o, s, intToPeano, peanoToInt, eq, add, mul) where
 import Minikanren
 
 o :: Term
