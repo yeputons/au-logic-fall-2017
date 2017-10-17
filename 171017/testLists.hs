@@ -4,6 +4,8 @@ import Peano
 import Lists
 
 x = Var "x"
+y = Var "y"
+z = Var "z"
 
 main :: IO ()
 main = hspec $ do
@@ -21,3 +23,10 @@ main = hspec $ do
     it "calculates length of nil" $ (solutions 2 $ lengtho nil) `shouldBe` [intToPeano 0]
     it "calculates length of x:nil" $ (solutions 2 $ lengtho (x-:-nil)) `shouldBe` [intToPeano 1]
     it "calculates length of x:x:nil" $ (solutions 2 $ lengtho (x-:-x-:-nil)) `shouldBe` [intToPeano 2]
+
+  describe "appendo" $ do
+    it "appends nil to nil" $ (solutions 2 $ appendo nil nil) `shouldBe` [nil]
+    it "appends nil to x:nil" $ (solutions 2 $ appendo nil (x-:-nil)) `shouldBe` [x-:-nil]
+    it "appends x:nil to nil" $ (solutions 2 $ appendo (x-:-nil) nil) `shouldBe` [x-:-nil]
+    it "appends x:nil to y:nil" $ (solutions 2 $ appendo (x-:-nil) (y-:-nil)) `shouldBe` [x-:-y-:-nil]
+    it "appends x:y:nil to z:y:nil" $ (solutions 2 $ appendo (x-:-y-:-nil) (z-:-y-:-nil)) `shouldBe` [x-:-y-:-z-:-y-:-nil]

@@ -1,4 +1,4 @@
-module Lists ((-:-), nil, lengtho) where
+module Lists ((-:-), nil, lengtho, appendo) where
 import Minikanren
 import Peano
 
@@ -17,3 +17,11 @@ lengtho a l =
     fresh $ \t ->
     fresh $ \l' ->
     a === h -:- t &&& lengtho t l' &&& l === s l')
+
+appendo :: Term -> Term -> Term -> Goal
+appendo a b ab =
+   (a === nil &&& b === ab) |||
+   (fresh $ \h ->
+    fresh $ \t ->
+    fresh $ \tb ->
+    a === h -:- t &&& appendo t b tb &&& h -:- tb === ab)
