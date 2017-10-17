@@ -23,6 +23,10 @@ unify (Func _ _)  (Func _ _) _  | otherwise = Nothing
 type State = (Subst, Int)
 type Goal = State -> [State]  -- Computes all solutions
 
+infix 4 ===
+infixr 3 &&&
+infixr 2 |||
+
 (===) :: Term -> Term -> Goal
 (===) a b (s, v) = do
     s' <- maybeToList (unify a b s)
