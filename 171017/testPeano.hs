@@ -67,3 +67,5 @@ main = hspec $ do
       (solutions 1 $ \x -> add (intToPeano 17) x (intToPeano 40)) `shouldBe` [intToPeano 23]
     it "x+23=40" $ do
       (solutions 1 $ \x -> add x (intToPeano 23) (intToPeano 40)) `shouldBe` [intToPeano 17]
+    it "x+x=8" $ do
+      (solutions 1 $ \x -> add x x (intToPeano 8)) `shouldBe` [intToPeano 4]
