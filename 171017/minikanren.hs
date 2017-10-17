@@ -1,4 +1,4 @@
-module Minikanren (Term(Func, Var), Goal, (===), (&&&), (|||), fresh, isTrue, solutions, run) where
+module Minikanren (Term(Func, Var), Goal, (===), (&&&), (|||), fresh, isTrue, solve, solutions, run) where
 
 import Data.List
 import Data.Maybe
@@ -43,7 +43,7 @@ fresh f (s, v) =
     f (Var vname) (s, v + 1)
 
 reify :: Subst -> Term -> Term
-reify s (Var x') | Just y <- lookup x' s  = y
+reify s (Var x') | Just y <- lookup x' s  = reify s y
 reify s x@(Var _) | otherwise = x
 reify s (Func f xs) = Func f (map (reify s) xs)
 
@@ -57,7 +57,7 @@ solutions :: Int -> (Term -> Goal) -> [Term]
 solutions c g =
   let vtop = "_top" in
   let g' = g (Var vtop) in
-  take c $ map (fromJust . lookup vtop) (solve g')
+  take c $ map (\s -> reify s (fromJust $ lookup vtop s)) (solve g')
 
 run :: (Term -> String) -> Int -> (Term -> Goal) -> IO ()
 run p c g =
