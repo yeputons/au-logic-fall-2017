@@ -1,4 +1,4 @@
-module Peano (intToPeano, peanoToInt, eq, add) where
+module Peano (intToPeano, peanoToInt, eq, add, mul) where
 import Minikanren
 
 o :: Term
@@ -27,3 +27,7 @@ add :: Term -> Term -> Term -> Goal
 add a b r =
   ((a === o) &&& (b === r)) |||
   (fresh $ \a' -> (a === s a') &&& (add a' (s b) r))
+
+mul a b r =
+  ((a === o) &&& (r === o)) |||
+  (fresh $ \a' -> (a === s a') &&& (fresh $ \r' -> mul a' b r' &&& add b r' r))

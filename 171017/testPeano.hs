@@ -69,3 +69,19 @@ main = hspec $ do
       (solutions 1 $ \x -> add x (intToPeano 23) (intToPeano 40)) `shouldBe` [intToPeano 17]
     it "x+x=8" $ do
       (solutions 1 $ \x -> add x x (intToPeano 8)) `shouldBe` [intToPeano 4]
+
+  describe "mul" $ do
+    it "multiplies 0 and 3" $ do
+      (solutions 2 $ mul (intToPeano 0) (intToPeano 3)) `shouldBe` [intToPeano 0]
+    it "multiplies 2 and 0" $ do
+      (solutions 2 $ mul (intToPeano 2) (intToPeano 0)) `shouldBe` [intToPeano 0]
+    it "multiplies 2 and 3" $ do
+      (solutions 2 $ mul (intToPeano 2) (intToPeano 3)) `shouldBe` [intToPeano 6]
+    it "multiplies 7 and 5" $ do
+      (solutions 2 $ mul (intToPeano 7) (intToPeano 5)) `shouldBe` [intToPeano 35]
+    it "it 3*x=15" $ do
+      (solutions 1 $ \x -> mul (intToPeano 3) x (intToPeano 15)) `shouldBe` [intToPeano 5]
+    it "it x*5=15" $ do
+      (solutions 1 $ \x -> mul x (intToPeano 5) (intToPeano 15)) `shouldBe` [intToPeano 3]
+    it "it x*x=25" $ do
+      (solutions 1 $ \x -> mul x x (intToPeano 25)) `shouldBe` [intToPeano 5]
