@@ -42,15 +42,15 @@ main = hspec $ do
 
   describe "add" $ do
     it "adds 0 and 0" $ do
-      (solutions 2 $ \x -> add (intToPeano 0) (intToPeano 0) x) `shouldBe` [intToPeano 0]
+      (solutions 2 $ add (intToPeano 0) (intToPeano 0)) `shouldBe` [intToPeano 0]
     it "adds 0 and 1" $ do
-      (solutions 2 $ \x -> add (intToPeano 0) (intToPeano 1) x) `shouldBe` [intToPeano 1]
+      (solutions 2 $ add (intToPeano 0) (intToPeano 1)) `shouldBe` [intToPeano 1]
     it "adds 1 and 0" $ do
-      (solutions 2 $ \x -> add (intToPeano 1) (intToPeano 0) x) `shouldBe` [intToPeano 1]
+      (solutions 2 $ add (intToPeano 1) (intToPeano 0)) `shouldBe` [intToPeano 1]
     it "adds 1 and 1" $ do
-      (solutions 2 $ \x -> add (intToPeano 1) (intToPeano 1) x) `shouldBe` [intToPeano 2]
+      (solutions 2 $ add (intToPeano 1) (intToPeano 1)) `shouldBe` [intToPeano 2]
     it "adds 17 and 23" $ do
-      (solutions 2 $ \x -> add (intToPeano 17) (intToPeano 23) x) `shouldBe` [intToPeano 40]
+      (solutions 2 $ add (intToPeano 17) (intToPeano 23)) `shouldBe` [intToPeano 40]
     it "0+x=0" $ do
       (solutions 1 $ \x -> add (intToPeano 0) x (intToPeano 0)) `shouldBe` [intToPeano 0]
     it "x+0=0" $ do
