@@ -17,6 +17,7 @@ main = hspec $ do
     it "works on (x:x:nil, 1)" $ (isTrue $ lengtho (x-:-x-:- nil) (intToPeano 1)) `shouldBe` False
     it "works on (x:x:nil, 2)" $ (isTrue $ lengtho (x-:-x-:- nil) (intToPeano 2)) `shouldBe` True
 
+  describe "lengtho" $ do
     it "calculates length of nil" $ (solutions 2 $ lengtho nil) `shouldBe` [intToPeano 0]
     it "calculates length of x:nil" $ (solutions 2 $ lengtho (x-:-nil)) `shouldBe` [intToPeano 1]
     it "calculates length of x:x:nil" $ (solutions 2 $ lengtho (x-:-x-:-nil)) `shouldBe` [intToPeano 2]
