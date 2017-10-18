@@ -12,6 +12,8 @@ unify (Var x) y s | Just x' <- lookup x s = unify x' y s
 unify x (Var y) s | Just y' <- lookup y s = unify x y' s
 
 unify (Var x) (Var y) s | x == y = Just s
+unify (Var x) y s | isPrefixOf "_" x = Just $ (x, y):s
+unify x (Var y) s | isPrefixOf "_" y = Just $ (y, x):s
 unify (Var x) y s = Just $ (x, y):s
 unify x (Var y) s = Just $ (y, x):s
 unify (Func x xs) (Func y ys) s | x == y && length xs == length ys = foldM f s (zip xs ys)
