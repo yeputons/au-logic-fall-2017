@@ -30,3 +30,10 @@ main = hspec $ do
     it "appends x:nil to nil" $ (solutions 2 $ appendo (x-:-nil) nil) `shouldBe` [x-:-nil]
     it "appends x:nil to y:nil" $ (solutions 2 $ appendo (x-:-nil) (y-:-nil)) `shouldBe` [x-:-y-:-nil]
     it "appends x:y:nil to z:y:nil" $ (solutions 2 $ appendo (x-:-y-:-nil) (z-:-y-:-nil)) `shouldBe` [x-:-y-:-z-:-y-:-nil]
+
+  describe "reverso" $ do
+    it "reverses nil" $ (solutions 2 $ reverso $ nil) `shouldBe` [nil]
+    it "reverses x:nil" $ (solutions 2 $ reverso $ x-:-nil) `shouldBe` [x-:-nil]
+    it "reverses x:y:nil" $ (solutions 2 $ reverso $ x-:-y-:-nil) `shouldBe` [y-:-x-:-nil]
+    it "reverses x:y:z:nil" $ (solutions 2 $ reverso $ x-:-y-:-z-:-nil) `shouldBe` [z-:-y-:-x-:-nil]
+    it "reverses back x:y:z:nil" $ (solutions 1 $ \t -> reverso t $ x-:-y-:-z-:-nil) `shouldBe` [z-:-y-:-x-:-nil]
