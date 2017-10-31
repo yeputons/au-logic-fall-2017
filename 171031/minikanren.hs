@@ -24,6 +24,7 @@ type State = (Subst, Int)
 type Goal = State -> [State]  -- Computes all solutions
 
 infix 4 ===
+infix 4 =/=
 infixr 3 &&&
 infixr 2 |||
 
@@ -31,6 +32,9 @@ infixr 2 |||
 (===) a b (s, v) = do
     s' <- maybeToList (unify a b s)
     return (s', v)
+
+(=/=) :: Term -> Term -> Goal
+(=/=) a b (s, v) = undefined
 
 (&&&) :: Goal -> Goal -> Goal
 (&&&) a b s = do
