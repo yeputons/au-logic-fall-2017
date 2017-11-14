@@ -7,10 +7,10 @@ type Point = (Int, Int)
 
 getOffset :: String -> Point
 getOffset [] = (0, 0)
-getOffset ('N':s) = ( 0,   1) +++ (getOffset s)
-getOffset ('S':s) = ( 0, (-1)) +++ (getOffset s)
-getOffset ('W':s) = ((-1),  0) +++ (getOffset s)
-getOffset ('E':s) = (  1,  0) +++ (getOffset s)
+getOffset ('N':s) = (  0 ,   1 ) +++ (getOffset s)
+getOffset ('S':s) = (  0 , (-1)) +++ (getOffset s)
+getOffset ('W':s) = ((-1),   0 ) +++ (getOffset s)
+getOffset ('E':s) = (  1 ,   0 ) +++ (getOffset s)
 
 getMinPath :: Point -> String
 getMinPath (0, 0) = ""
@@ -22,4 +22,4 @@ getMinPath (x, y) | x > 0 = 'E':getMinPath (x - 1, y)
 solve :: String -> String
 solve = getMinPath . getOffset
 
-main = interact (unlines . map solve . lines)
+main = interact $ unlines . map solve . lines
