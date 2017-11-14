@@ -28,7 +28,7 @@ h ==> b = Propagation h b
 type Subst = [(String, Term)]
 
 reify :: Subst -> Term -> Term
-reify s (Var x') | Just y <- lookup x' s  = reify s y
+reify s (Var x') | Just y <- lookup x' s = y
 reify s x@(Var _) | otherwise = x
 reify s (Func f xs) = Func f (map (reify s) xs)
 
@@ -52,7 +52,7 @@ tryRule g (Propagation h b) = do
   return $ (map (reify s) b) ++ g
 
 matchMulti :: TermMultiset -> TermMultiset -> Subst -> Maybe (TermMultiset, Subst)
-matchMulti gs [] _ = Just (gs, [])
+matchMulti gs [] s = Just (gs, s)
 matchMulti gs (r:rs') s | r == true = matchMulti gs rs' s
 matchMulti gs (r:rs') s | otherwise = msum $ map matchMulti' (enumerateWithDelete gs)
   where
