@@ -1,0 +1,3 @@
+consult('04.pl').
+rev(nil).
+rev(cons(A, cons(B, cons(C, nil)))).
