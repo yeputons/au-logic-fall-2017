@@ -31,7 +31,7 @@ rules =
     [coin1, coin1] <=> [coin2],
     [coin50, coin50] <=> [coin1],
     [coin20, coin20, coin20, coin20, coin20] <=> [coin1],
---    [coin20, coin20, coin20] <=> [coin50, coin10],
+    [coin20, coin20, coin20] <=> [coin50, coin10],
     [coin20, coin20, coin10] <=> [coin50],
     [coin10, coin10] <=> [coin20]
   ]
@@ -56,6 +56,6 @@ main = do
     it "works on empty test" $ do
       (eval rules []) `shouldBeNoOrd` (Just [])
     it "works on some examples" $ do
---      (eval rules [coin20, coin20, coin20]) `shouldBeNoOrd` (Just [coin50, coin10])
+      (eval rules [coin20, coin20, coin20]) `shouldBeNoOrd` (Just [coin50, coin10])
       (eval rules (take 39 $ repeat coin10)) `shouldBeNoOrd` (Just [coin1, coin2, coin50, coin20, coin20])
   $forAllProperties (quickCheckWithResult stdArgs { maxSuccess = 300 })
