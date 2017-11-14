@@ -52,7 +52,7 @@ a `shouldBeNoOrd` b = (fmap sort a) `shouldBe` (fmap sort b)
 return []
 
 main = do
-  hspec $ describe "Task01" $ do
+  hspec $ describe "Task02" $ do
     it "works on empty test" $ do
       (eval rules []) `shouldBeNoOrd` (Just [])
     it "works on some examples" $ do
