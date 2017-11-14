@@ -1,5 +1,5 @@
- {-# LANGUAGE TemplateHaskell #-}
- 
+{-# LANGUAGE TemplateHaskell #-}
+
 import Task02
 import Test.QuickCheck
 import Test.Hspec
