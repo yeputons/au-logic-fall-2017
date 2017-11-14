@@ -6,6 +6,7 @@
 coin1, coin1 <=> coin2.
 coin50, coin50 <=> coin1.
 coin20, coin20, coin20, coin20, coin20 <=> coin1.
+coin20, coin20, coin20 <=> coin50, coin10.
 coin20, coin20, coin10 <=> coin50.
 coin10, coin10 <=> coin20.
 
