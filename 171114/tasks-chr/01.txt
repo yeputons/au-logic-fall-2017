@@ -1,0 +1,2 @@
+consult('01.pl').
+east, north, west, west, south.

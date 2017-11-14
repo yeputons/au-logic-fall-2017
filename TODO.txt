@@ -11,3 +11,4 @@
 Спросить Диму, что происходило на паре 10.10.2017: https://github.com/dboulytchev/uKanren_transformations/blob/master/src/Term.hs
 Написать disequality constraint
 Написать реляционный генератор корректных программ на, скажем, C. Если писать на MiniKanren, то они наверняка будут интересными.
+171114: дорешать задачки на Haskell

@@ -1,0 +1,6 @@
+consult('03.pl').
+electricity, electricity,
+heat, heat, heat, heat, heat,
+h2, h2, h2, h2, h2,
+o2, o2, o2, o2, o2,
+h2o, h2o, h2o, h2o, h2o.

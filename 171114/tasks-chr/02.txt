@@ -1,0 +1,4 @@
+consult('02.pl').
+coin10, coin10, coin10, coin10, coin10.
+coin20, coin20, coin20, coin20, coin20.
+coin20, coin20, coin20, coin10.
