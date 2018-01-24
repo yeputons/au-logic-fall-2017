@@ -38,7 +38,7 @@ infixr 2 |||
 (===) a b (PSol e d, v) = do
     e' <- maybeToList (unify a b e)
     let e'' = e' ++ e
-    d'' <- maybeToList $ msum $ Just [] : map (updateDiseq e'') d
+    d'' <- maybeToList $ fmap concat $ sequence $ map (updateDiseq e'') d
     return (PSol (e' ++ e) d, v)
 
 updateDiseq :: Subst -> (String, Term) -> Maybe Subst
