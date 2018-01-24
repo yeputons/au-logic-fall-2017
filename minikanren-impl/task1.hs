@@ -84,8 +84,3 @@ formatNumber t = reverse $ map (intToDigit . peanoToInt) $ listToHlist t
 
 formatSolution :: (Term, Term, Term) -> (String, String, String)
 formatSolution (a, b, c) = (formatNumber a, formatNumber b, formatNumber c)
-
-main :: IO ()
-main = do
-  let prob = constructProblem $ parseInput "89?" "?99" "98?"
-  mapM_ (print . formatSolution . getSolution) $ solve prob
