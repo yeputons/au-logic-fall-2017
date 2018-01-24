@@ -10,9 +10,12 @@ incrementDigito x x' y y' =
   (s x === base &&& y === o &&& y' === s x') |||
   (s x =/= base &&& y === s x &&& y' === x')
 
-sumDigitso :: Term -> Term -> Term -> Term -> Goal
-sumDigitso a b r r' =
-  ((a === o) &&& (b === r) &&& (r' === o)) |||
+addDigito :: Term -> Term -> Term -> Term -> Term -> Goal
+addDigito a x x' y y' =
+  (a === o &&& x === y &&& x' === y') |||
   (fresh $ \a' -> (a === s a') &&& (
-    fresh $ \q -> fresh $ \q' -> sumDigitso a' b q q' &&& incrementDigito q q' r r'
+    fresh $ \q -> fresh $ \q' -> addDigito a' x x' q q' &&& incrementDigito q q' y y'
   ))
+
+sumDigitso :: Term -> Term -> Term -> Term -> Goal
+sumDigitso a b r r' = addDigito a b o r r'
