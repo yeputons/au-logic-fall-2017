@@ -45,3 +45,9 @@ main = hspec $ do
     it "works on (cd:ab:ac:nil, d)" $ (solutions 2 $ \k -> lookupo (cd-:-ab-:-ac-:-nil) k d) `shouldBe` [noDiseq c]
     it "works on (ad:cd:ab:ac:nil, d)" $ (solutions 2 $ \k -> lookupo (ad-:-cd-:-ab-:-ac-:-nil) k d) `shouldBe` [noDiseq a, noDiseq c]
     it "works on (ab:ad:cd:ab:ac:nil, d)" $ (solutions 2 $ \k -> lookupo (ab-:-ad-:-cd-:-ab-:-ac-:-nil) k d) `shouldBe` [noDiseq c]
+
+  describe "lookupo list" $ do
+    it "works on nil" $ (solutions 1 $ lookupo nil a) `shouldBe` []
+    it "works on (?:nil, a, b)" $ (solutions 2 $ \x -> lookupo (x-:-nil) a b) `shouldBe` [noDiseq ab]
+    it "works on (cd:?:nil, a, b)" $ (solutions 2 $ \x -> lookupo (cd-:-x-:-nil) a b) `shouldBe` [noDiseq ab]
+    it "works on (cd:?:ac:nil, a, b)" $ (solutions 2 $ \x -> lookupo (cd-:-x-:-ac-:-nil) a b) `shouldBe` [noDiseq ab]
