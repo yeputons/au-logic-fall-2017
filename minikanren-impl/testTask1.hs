@@ -34,3 +34,9 @@ main = hspec $ do
       (solve $ sumDigitso (intToPeano 9) (intToPeano 1) x y) `shouldBeXy` [(intToPeano 0, intToPeano 1, [])]
     it "works on (4, 8)" $ do
       (solve $ sumDigitso (intToPeano 4) (intToPeano 8) x y) `shouldBeXy` [(intToPeano 2, intToPeano 1, [])]
+
+  describe "sumDigitso3" $ do
+    it "works on (0, 0)" $ do
+      (solve $ sumDigitso3 (intToPeano 0) (intToPeano 0) (intToPeano 0) x y) `shouldBeXy` [(intToPeano 0, intToPeano 0, [])]
+    it "works on (3, 4, 5)" $ do
+      (solve $ sumDigitso3 (intToPeano 3) (intToPeano 4) (intToPeano 5) x y) `shouldBeXy` [(intToPeano 2, intToPeano 1, [])]

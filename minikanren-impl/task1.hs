@@ -19,3 +19,7 @@ addDigito a x x' y y' =
 
 sumDigitso :: Term -> Term -> Term -> Term -> Goal
 sumDigitso a b r r' = addDigito a b o r r'
+
+sumDigitso3 :: Term -> Term -> Term -> Term -> Term -> Goal
+sumDigitso3 a b c r r' = fresh $ \q -> fresh $ \q' ->
+  sumDigitso a b q q' &&& addDigito c q q' r r'
