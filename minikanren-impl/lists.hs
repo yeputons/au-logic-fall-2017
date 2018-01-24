@@ -36,6 +36,12 @@ reverso' a b rab =
 reverso :: Term -> Term -> Goal
 reverso a ra = reverso' a nil ra
 
+elemo :: Term -> Term -> Goal
+elemo x xs = fresh $ \h -> fresh $ \t -> xs === h -:- t &&& (x === h ||| elemo x t)
+  
+notElemo :: Term -> Term -> Goal
+notElemo x xs = xs === nil ||| (fresh $ \h -> fresh $ \t -> xs === h -:- t &&& (x =/= h ||| notElemo x t))
+
 hlistToList :: [Term] -> Term
 hlistToList []     = nil
 hlistToList (x:xs) = x-:-hlistToList xs
