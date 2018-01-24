@@ -39,7 +39,7 @@ infixr 2 |||
     e' <- maybeToList (unify a b e)
     let e'' = e' ++ e
     d'' <- maybeToList $ fmap concat $ sequence $ map (updateDiseq e'') d
-    return (PSol (e' ++ e) d, v)
+    return (PSol e'' d'', v)
 
 updateDiseq :: Subst -> (String, Term) -> Maybe Subst
 updateDiseq e (n, d) =
