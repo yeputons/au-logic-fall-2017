@@ -1,4 +1,4 @@
-module Lists ((-:-), nil, lengtho, appendo, reverso, hlistToList, listToHlist) where
+module Lists ((-:-), nil, lengtho, appendo, reverso, elemo, notElemo, hlistToList, listToHlist) where
 import Minikanren
 import Peano
 
