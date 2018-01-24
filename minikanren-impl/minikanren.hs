@@ -1,4 +1,4 @@
-module Minikanren (Term(Func, Var), Goal, (===), (&&&), (|||), fresh, isTrue, noDiseq, solve, solutions, run) where
+module Minikanren (Term(Func, Var), Goal, (===), (=/=), (&&&), (|||), fresh, isTrue, noDiseq, solve, solutions, run) where
 
 import Data.List
 import Data.Maybe
@@ -30,6 +30,7 @@ type State = (PSol, Int)
 type Goal = State -> [State]  -- Computes all solutions
 
 infix 4 ===
+infix 4 =/=
 infixr 3 &&&
 infixr 2 |||
 
@@ -46,6 +47,13 @@ updateDiseq e (n, d) =
     Nothing -> Just []
     Just [] -> Nothing
     Just x  -> Just x
+
+(=/=) :: Term -> Term -> Goal
+(=/=) a b (PSol e d, v) =
+    case unify a b e of
+    Nothing -> [(PSol e d, v)]
+    Just [] -> []
+    Just x  -> [(PSol e (x ++ d), v)]
 
 (&&&) :: Goal -> Goal -> Goal
 (&&&) a b s = do
