@@ -1,4 +1,7 @@
 module Task1 where
+import Data.Char
+import Data.Maybe
+import Control.Monad.State
 import Minikanren
 import Peano
 import Lists
@@ -39,3 +42,46 @@ sumNumberso' a b c s =
 
 sumNumberso :: Term -> Term -> Term -> Goal
 sumNumberso a b s = sumNumberso' a b o s
+
+parseNumber :: String -> [Maybe Int]
+parseNumber = map parseDigit
+  where
+    parseDigit '?' = Nothing
+    parseDigit x   = Just $ digitToInt x
+
+generateTerm :: [Maybe Int] -> State Int Term
+generateTerm s = fmap hlistToList $ mapM generateDigit (reverse s)
+  where
+    generateDigit :: Maybe Int -> State Int Term
+    generateDigit Nothing = do
+      i <- get
+      put (i + 1)
+      return $ Var ("v" ++ show i)
+    generateDigit (Just i) = return $ intToPeano i
+
+parseInput :: String -> String -> String -> (Term, Term, Term)
+parseInput a b c = evalState (parseInput' a b c) 0
+  where
+    parseInput' a b c = do
+      at <- generateTerm (parseNumber a)
+      bt <- generateTerm (parseNumber b)
+      ct <- generateTerm (parseNumber c)
+      return (at, bt, ct)
+
+constructProblem :: (Term, Term, Term) -> Goal
+constructProblem (a, b, c) =
+  (Var "a" === a) &&& (Var "b" === b) &&& (Var "c" === c) &&& sumNumberso a b c
+
+getSolution :: PSol -> (Term, Term, Term)
+getSolution (PSol e n) = (fromJust $ lookup "a" e, fromJust $ lookup "b" e, fromJust $ lookup "c" e)
+
+formatNumber :: Term -> String
+formatNumber t = reverse $ map (intToDigit . peanoToInt) $ listToHlist t
+
+formatSolution :: (Term, Term, Term) -> (String, String, String)
+formatSolution (a, b, c) = (formatNumber a, formatNumber b, formatNumber c)
+
+main :: IO ()
+main = do
+  let prob = constructProblem $ parseInput "89?" "?99" "98?"
+  mapM_ (print . formatSolution . getSolution) $ solve prob
