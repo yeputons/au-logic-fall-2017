@@ -1,4 +1,4 @@
-module Minikanren (Term(Func, Var), Goal, (===), (=/=), (&&&), (|||), fresh, isTrue, noDiseq, solve, solutions, run) where
+module Minikanren (Term(Func, Var), Goal, (===), (=/=), (&&&), (|||), fresh, isTrue, noDiseq, solve, PSol(PSol), solutions, run) where
 
 import Data.List
 import Data.Maybe
