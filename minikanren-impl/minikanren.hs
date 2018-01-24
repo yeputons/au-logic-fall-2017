@@ -6,7 +6,7 @@ import Control.Monad
 
 data Term = Func String [Term] | Var String deriving (Show, Eq)
 type Subst = [(String, Term)]
-data PSol = PSol Subst Subst  -- equality, disequality
+data PSol = PSol Subst Subst deriving Show -- equality, disequality
 type Solution = (Term, Subst)  -- term, disequality for variables
 
 unify :: Term -> Term -> Subst -> Maybe Subst
