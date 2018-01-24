@@ -1,4 +1,4 @@
-module Lists ((-:-), nil, lengtho, appendo, reverso) where
+module Lists ((-:-), nil, lengtho, appendo, reverso, hlistToList, listToHlist) where
 import Minikanren
 import Peano
 
@@ -35,3 +35,11 @@ reverso' a b rab =
 
 reverso :: Term -> Term -> Goal
 reverso a ra = reverso' a nil ra
+
+hlistToList :: [Term] -> Term
+hlistToList []     = nil
+hlistToList (x:xs) = x-:-hlistToList xs
+
+listToHlist :: Term -> [Term]
+listToHlist (Func "[]" []     ) = []
+listToHlist (Func ":"  [x, xs]) = x : listToHlist xs
