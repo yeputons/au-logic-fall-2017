@@ -12,4 +12,4 @@ lookupo al k v =
     fresh $ \t ->
         (al === (pair k' v') -:- t) &&&
         ((k' === k &&& v' === v) |||
-         (k' =/= k &&& lookupo k t v))
+         (k' =/= k &&& lookupo t k v))
