@@ -74,8 +74,13 @@ reify s (Var x') | Just y <- lookup x' s  = reify s y
 reify s x@(Var _) | otherwise = x
 reify s (Func f xs) = Func f (map (reify s) xs)
 
+reifySol :: PSol -> PSol
+reifySol (PSol e n) = PSol (map reifySubst e) (map reifySubst n)
+  where
+    reifySubst (n, t) = (n, reify e t)
+
 solve :: Goal -> [PSol]
-solve g = map fst $ g (PSol [] [], 0)
+solve g = map (reifySol . fst) $ g (PSol [] [], 0)
 
 isTrue :: Goal -> Bool
 isTrue = not . null . solve
@@ -90,7 +95,7 @@ solutions c g =
   take c $ map (psol2Sol vtop) (solve g')
   where
     psol2Sol :: String -> PSol -> Solution
-    psol2Sol vtop (PSol e d) = (reify e (fromJust $ lookup vtop e), d)
+    psol2Sol vtop (PSol e d) = (fromJust $ lookup vtop e, d)
 
 run :: (Term -> String) -> Int -> (Term -> Goal) -> IO ()
 run p c g =
