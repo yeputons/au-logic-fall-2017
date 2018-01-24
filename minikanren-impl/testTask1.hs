@@ -2,6 +2,7 @@ import Test.Hspec
 import Data.Maybe
 import Minikanren
 import Peano
+import Lists
 import Task1
 
 x = Var "x"
@@ -40,3 +41,11 @@ main = hspec $ do
       (solve $ sumDigitso3 (intToPeano 0) (intToPeano 0) (intToPeano 0) x y) `shouldBeXy` [(intToPeano 0, intToPeano 0, [])]
     it "works on (3, 4, 5)" $ do
       (solve $ sumDigitso3 (intToPeano 3) (intToPeano 4) (intToPeano 5) x y) `shouldBeXy` [(intToPeano 2, intToPeano 1, [])]
+
+  describe "sumNumberso" $ do
+    it "computes 3+4" $ do
+      (solutions 2 $ sumNumberso (intToPeano 3 -:- nil) (intToPeano 4 -:- nil)) `shouldBe` [(intToPeano 7 -:- nil, [])]
+    it "computes 123+456" $ do
+      (solutions 2 $ sumNumberso (hlistToList $ map intToPeano [3, 2, 1]) (hlistToList $ map intToPeano [6, 5, 4])) `shouldBe` [(hlistToList $ map intToPeano [9, 7, 5], [])]
+    it "computes 456+187" $ do
+      (solutions 2 $ sumNumberso (hlistToList $ map intToPeano [6, 5, 4]) (hlistToList $ map intToPeano [7, 8, 1])) `shouldBe` [(hlistToList $ map intToPeano [3, 4, 6], [])]
