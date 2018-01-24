@@ -18,3 +18,7 @@ main = hspec $ do
     it "a =/= x" $ (isTrue $ a =/= x) `shouldBe` True
     it "a === x &&& a =/= x" $ (isTrue $ a === x &&& a =/= x) `shouldBe` False
     it "a =/= x &&& a === x" $ (isTrue $ a =/= x &&& a === x) `shouldBe` False
+    it "b === x &&& a =/= x" $ (solutions 2 $ \x -> b === x &&& a =/= x) `shouldBe` [noDiseq b]
+    it "a =/= x &&& b === x" $ (solutions 2 $ \x -> a =/= x &&& b === x) `shouldBe` [noDiseq b]
+    it "a === x &&& b =/= x" $ (solutions 2 $ \x -> a === x &&& b =/= x) `shouldBe` [noDiseq a]
+    it "b =/= x &&& a === x" $ (solutions 2 $ \x -> b =/= x &&& a === x) `shouldBe` [noDiseq a]
