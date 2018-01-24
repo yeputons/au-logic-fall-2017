@@ -36,7 +36,16 @@ infixr 2 |||
 (===) :: Term -> Term -> Goal
 (===) a b (PSol e d, v) = do
     e' <- maybeToList (unify a b e)
+    let e'' = e' ++ e
+    d'' <- maybeToList $ msum $ Just [] : map (updateDiseq e'') d
     return (PSol (e' ++ e) d, v)
+
+updateDiseq :: Subst -> (String, Term) -> Maybe Subst
+updateDiseq e (n, d) =
+    case unify (Var n) d e of
+    Nothing -> Just []
+    Just [] -> Nothing
+    Just x  -> Just x
 
 (&&&) :: Goal -> Goal -> Goal
 (&&&) a b s = do
