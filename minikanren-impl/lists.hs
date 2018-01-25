@@ -40,7 +40,7 @@ elemo :: Term -> Term -> Goal
 elemo x xs = fresh $ \h -> fresh $ \t -> xs === h -:- t &&& (x === h ||| elemo x t)
   
 notElemo :: Term -> Term -> Goal
-notElemo x xs = xs === nil ||| (fresh $ \h -> fresh $ \t -> xs === h -:- t &&& (x =/= h ||| notElemo x t))
+notElemo x xs = xs === nil ||| (fresh $ \h -> fresh $ \t -> xs === h -:- t &&& (x =/= h &&& notElemo x t))
 
 hlistToList :: [Term] -> Term
 hlistToList []     = nil
