@@ -1,4 +1,4 @@
-module Minikanren (Term(Func, Var), Goal, (===), (=/=), (&&&), (|||), noSolutions, fresh, isTrue, noDiseq, solve, PSol(PSol), solutions, run) where
+module Minikanren (Term(Func, Var), Goal, (===), (=/=), (&&&), (|||), singleSolution, fresh, isTrue, noDiseq, solve, PSol(PSol), solutions, run) where
 
 import Data.List
 import Data.Maybe
@@ -66,9 +66,9 @@ updateDiseq e (n, d) =
 (|||) :: Goal -> Goal -> Goal
 (|||) a b s = (a s) `mplus` (b s)
 
-noSolutions :: Goal -> Goal
-noSolutions g state | null (elements (g state)) = return state
-noSolutions g state | otherwise = mzero
+singleSolution :: Goal -> Goal
+singleSolution g state | length (elements (g state)) == 1 = return state
+singleSolution g state | otherwise = mzero
 
 fresh :: (Term -> Goal) -> Goal
 fresh f (s, v) =
