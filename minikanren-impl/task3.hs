@@ -25,14 +25,14 @@ finishState s = fresh $ \l -> fresh $ \r -> fresh $ \boatPos -> (state l r boatP
 
 canTransfer :: Term -> Term -> Term -> Term -> Term -> Goal
 canTransfer l1 r1 l2 r2 x =
-  (x === empty &&& l1 === l2 &&& r1 === r2) ||| (
+  x =/= empty &&& (
     fresh $ \h -> fresh $ \t -> l1 === h -:- t &&& (
     (x === h &&& l2 === t &&& r2 === (h -:- r1)) ||| (
       fresh $ \t' -> l2 === h -:- t' &&&
         canTransfer t r1 t' r2 x
     )
     )
-  )
+  ) ||| x === empty &&& l1 === l2 &&& r1 === r2
 
 canMove :: Term -> Term -> Term -> Goal
 canMove from to x =
@@ -71,6 +71,10 @@ showCanMoveSeveralResult (PSol e _)  = "<disequality-constraints-detected>"
 initial :: Term
 initial = state (hlistToList [fox, goose, beans]) (hlistToList []) left
 
+goal :: Term
+goal = state (hlistToList [fox, beans]) (hlistToList [goose]) right
+
 main :: IO ()
 main = do
-    run showCommands 10 $ canMoveSeveral initial $ state (hlistToList [fox, goose, beans]) (hlistToList []) right
+    mapM_ (putStrLn . showCanMoveSeveralResult) $ solve (Var "initial" === initial &&& canMoveSeveral (Var "initial") (Var "goal") (Var "cmds") &&& Var "goal" === goal)
+    --run showStrs 1 $ canMoveSeveral initial goal
