@@ -54,9 +54,8 @@ matcho p n =
   (p === nil &&& n === nil) |||
   (fresh $ \ph -> fresh $ \pt -> p === ph -:- pt &&&
   (fresh $ \nh -> fresh $ \nt -> n === nh -:- nt &&&
-    ((ph =/= placeholder &&& ph === nh) |||
-     (ph === placeholder &&& ltBase nh)
-    ) &&&
+    ltBase nh &&&
+    (ph === nh ||| ph === placeholder) &&&
     matcho pt nt
   )
   )
