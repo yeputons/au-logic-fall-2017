@@ -29,6 +29,10 @@ unify (Func _ _)  (Func _ _) _  | otherwise = Nothing
 type State = (PSol, Int)
 type Goal = State -> [State]  -- Computes all solutions
 
+maybeToMonadPlus :: MonadPlus m => Maybe a -> m a
+maybeToMonadPlus (Just x) = return x
+maybeToMonadPlus Nothing  = mzero
+
 infix 4 ===
 infix 4 =/=
 infixr 3 &&&
@@ -36,9 +40,9 @@ infixr 2 |||
 
 (===) :: Term -> Term -> Goal
 (===) a b (PSol e d, v) = do
-    e' <- maybeToList (unify a b e)
+    e' <- maybeToMonadPlus (unify a b e)
     let e'' = e' ++ e
-    d'' <- maybeToList $ fmap concat $ sequence $ map (updateDiseq e'') d
+    d'' <- maybeToMonadPlus $ fmap concat $ sequence $ map (updateDiseq e'') d
     return (PSol e'' d'', v)
 
 updateDiseq :: Subst -> (String, Term) -> Maybe Subst
@@ -51,9 +55,9 @@ updateDiseq e (n, d) =
 (=/=) :: Term -> Term -> Goal
 (=/=) a b (PSol e d, v) =
     case unify a b e of
-    Nothing -> [(PSol e d, v)]
-    Just [] -> []
-    Just x  -> [(PSol e (x ++ d), v)]
+    Nothing -> return (PSol e d, v)
+    Just [] -> mzero
+    Just x  -> return (PSol e (x ++ d), v)
 
 (&&&) :: Goal -> Goal -> Goal
 (&&&) a b s = do
@@ -62,7 +66,7 @@ updateDiseq e (n, d) =
     return s''
 
 (|||) :: Goal -> Goal -> Goal
-(|||) a b s = (a s) ++ (b s)
+(|||) a b s = (a s) `mplus` (b s)
 
 fresh :: (Term -> Goal) -> Goal
 fresh f (s, v) =
@@ -83,7 +87,7 @@ solve :: Goal -> [PSol]
 solve g = map (reifySol . fst) $ g (PSol [] [], 0)
 
 isTrue :: Goal -> Bool
-isTrue = not . null . solve
+isTrue g = not $ null $ solve g
 
 noDiseq :: Term -> Solution
 noDiseq x = (x, [])
@@ -91,8 +95,7 @@ noDiseq x = (x, [])
 solutions :: Int -> (Term -> Goal) -> [Solution]
 solutions c g =
   let vtop = "_top" in
-  let g' = g (Var vtop) in
-  take c $ map (psol2Sol vtop) (solve g')
+  take c $ map (psol2Sol vtop) (solve (g (Var vtop)))
   where
     psol2Sol :: String -> PSol -> Solution
     psol2Sol vtop (PSol e d) = (fromJust $ lookup vtop e, d)
