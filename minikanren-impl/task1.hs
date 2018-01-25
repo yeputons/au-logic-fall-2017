@@ -62,7 +62,13 @@ matcho p n =
 
 solutiono :: Term -> Term -> Term -> Term -> Term -> Term -> Goal
 solutiono pa pb pc a b c =
-  matcho pa a &&& matcho pb b &&& matcho pc c &&& sumNumberso a b c
+  matcho pa a &&& matcho pb b &&& sumNumberso a b c &&& matcho pc c
+
+ssprob :: Term -> Term -> Term -> Term -> Goal
+ssprob l pa pb pc =
+  fresh $ \a -> fresh $ \b -> fresh $ \c -> lengtho a l &&& lengtho b l &&& sumNumberso a b c &&& lengtho c l &&&
+  matcho pa a &&& matcho pb b &&& matcho pc c &&&
+  singleSolution (fresh $ \a -> fresh $ \b -> fresh $ \c -> solutiono pa pb pc a b c)
 
 parsePattern :: String -> Term
 parsePattern s = hlistToList $ reverse $ map parseDigit s
