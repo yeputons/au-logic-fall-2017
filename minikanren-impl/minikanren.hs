@@ -3,6 +3,7 @@ module Minikanren (Term(Func, Var), Goal, (===), (=/=), (&&&), (|||), fresh, isT
 import Data.List
 import Data.Maybe
 import Control.Monad
+import Control.Monad.Plus
 import InterleavingStream
 
 data Term = Func String [Term] | Var String deriving (Show, Eq)
@@ -30,10 +31,6 @@ unify (Func _ _)  (Func _ _) _  | otherwise = Nothing
 type State = (PSol, Int)
 type Goal = State -> InterleavingStream State  -- Computes all solutions
 
-maybeToMonadPlus :: MonadPlus m => Maybe a -> m a
-maybeToMonadPlus (Just x) = return x
-maybeToMonadPlus Nothing  = mzero
-
 infix 4 ===
 infix 4 =/=
 infixr 3 &&&
@@ -41,9 +38,9 @@ infixr 2 |||
 
 (===) :: Term -> Term -> Goal
 (===) a b (PSol e d, v) = do
-    e' <- maybeToMonadPlus (unify a b e)
+    e' <- mfromMaybe (unify a b e)
     let e'' = e' ++ e
-    d'' <- maybeToMonadPlus $ fmap concat $ sequence $ map (updateDiseq e'') d
+    d'' <- mfromMaybe $ fmap concat $ sequence $ map (updateDiseq e'') d
     return (PSol e'' d'', v)
 
 updateDiseq :: Subst -> (String, Term) -> Maybe Subst
