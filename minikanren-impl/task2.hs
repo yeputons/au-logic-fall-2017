@@ -23,16 +23,20 @@ goodState s = fresh $ \l -> fresh $ \r -> fresh $ \boatPos -> (state l r boatPos
 finishState :: Term -> Goal
 finishState s = fresh $ \l -> fresh $ \r -> fresh $ \boatPos -> (state l r boatPos) === s &&& l === nil &&& boatPos === right
 
+removeo :: Term -> Term -> Term -> Goal
+removeo l x l' =
+   (l === nil &&& l' === nil) |||
+   (fresh $ \h -> fresh $ \t -> l === h-:-t &&& (
+     (h === x &&& l' === t) |||
+     (h =/= x &&& (fresh $ \t' -> l' === h-:-t' &&& removeo t x t'))
+   ))
+
 canTransfer :: Term -> Term -> Term -> Term -> Term -> Goal
 canTransfer l1 r1 l2 r2 x =
-  x =/= empty &&& (
-    fresh $ \h -> fresh $ \t -> l1 === h -:- t &&& (
-    (x === h &&& l2 === t &&& r2 === (h -:- r1)) ||| (
-      fresh $ \t' -> l2 === h -:- t' &&&
-        canTransfer t r1 t' r2 x
-    )
-    )
-  ) ||| x === empty &&& l1 === l2 &&& r1 === r2
+  x === empty &&& l1 === l2 &&& r1 === r2 |||
+  (x =/= empty &&& (
+   fresh $ \t -> r2 ===  x -:- r1 &&& removeo l1 x l2
+  ))
 
 canMove :: Term -> Term -> Term -> Goal
 canMove from to x =
