@@ -1,4 +1,5 @@
 module Task3 where
+import Data.List
 import Minikanren
 import Lists
 
@@ -54,13 +55,18 @@ showStr :: Term -> String
 showStr (Func x []) = x
 
 showStrs :: Term -> String
-showStrs s = show $ map showStr $ listToHlist s
+showStrs s = "[" ++ (concat $ intersperse ", " (map showStr $ listToHlist s)) ++ "]"
 
 showState :: Term -> String
-showState (Func "state" [l, r, Func side []]) = show $ (showStrs l, showStrs r, side)
+showState (Func "state" [l, r, Func side []]) = "(" ++ showStrs l ++ ", " ++ showStrs r ++ ", " ++ side ++ ")"
 
-showCommands :: Term -> String
-showCommands = showStrs
+showCanMoveSeveralResult :: PSol -> String
+showCanMoveSeveralResult (PSol e []) =
+  let Just initial = lookup "initial" e in
+  let Just goal = lookup "goal" e in
+  let Just cmds = lookup "cmds" e in
+  showState initial ++ "  ---> " ++ showState goal ++ " via " ++ showStrs cmds
+showCanMoveSeveralResult (PSol e _)  = "<disequality-constraints-detected>"
 
 initial :: Term
 initial = state (hlistToList [fox, goose, beans]) (hlistToList []) left
