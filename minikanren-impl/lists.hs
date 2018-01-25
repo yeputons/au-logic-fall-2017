@@ -16,7 +16,7 @@ lengtho a l =
    (fresh $ \h ->
     fresh $ \t ->
     fresh $ \l' ->
-    a === h -:- t &&& lengtho t l' &&& l === s l')
+    l === s l' &&& a === h -:- t &&& lengtho t l')
 
 appendo :: Term -> Term -> Term -> Goal
 appendo a b ab =
