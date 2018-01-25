@@ -3,5 +3,8 @@ import Minikanren
 
 main :: IO ()
 main = do
-  let prob = constructProblem $ parseInput "89?" "?99" "98?"
+  let pa = parsePattern "89?"
+  let pb = parsePattern "?99"
+  let pc = parsePattern "98?"
+  let prob = constructProblem pa pb pc
   mapM_ (print . formatSolution . getSolution) $ solve prob

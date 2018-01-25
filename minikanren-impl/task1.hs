@@ -47,40 +47,41 @@ sumNumberso' a b c s =
 sumNumberso :: Term -> Term -> Term -> Goal
 sumNumberso a b s = sumNumberso' a b o s
 
-parseNumber :: String -> [Maybe Int]
-parseNumber = map parseDigit
-  where
-    parseDigit '?' = Nothing
-    parseDigit x   = Just $ digitToInt x
+placeholder = Func "?" []
 
-generateTerm :: [Maybe Int] -> State Int Term
-generateTerm s = fmap hlistToList $ mapM generateDigit (reverse s)
-  where
-    generateDigit :: Maybe Int -> State Int Term
-    generateDigit Nothing = do
-      i <- get
-      put (i + 1)
-      return $ Var ("v" ++ show i)
-    generateDigit (Just i) = return $ intToPeano i
+matcho :: Term -> Term -> Goal
+matcho p n =
+  (p === nil &&& n === nil) |||
+  (fresh $ \ph -> fresh $ \pt -> p === ph -:- pt &&&
+  (fresh $ \nh -> fresh $ \nt -> n === nh -:- nt &&&
+    ((ph =/= placeholder &&& ph === nh) |||
+     (ph === placeholder &&& ltBase nh)
+    ) &&&
+    matcho pt nt
+  )
+  )
 
-parseInput :: String -> String -> String -> (Term, Term, Term)
-parseInput a b c = evalState (parseInput' a b c) 0
-  where
-    parseInput' a b c = do
-      at <- generateTerm (parseNumber a)
-      bt <- generateTerm (parseNumber b)
-      ct <- generateTerm (parseNumber c)
-      return (at, bt, ct)
+solutiono :: Term -> Term -> Term -> Term -> Term -> Term -> Goal
+solutiono pa pb pc a b c =
+  matcho pa a &&& matcho pb b &&& matcho pc c &&& sumNumberso a b c
 
-constructProblem :: (Term, Term, Term) -> Goal
-constructProblem (a, b, c) =
-  (Var "a" === a) &&& (Var "b" === b) &&& (Var "c" === c) &&& sumNumberso a b c
+parsePattern :: String -> Term
+parsePattern s = hlistToList $ reverse $ map parseDigit s
+  where
+    parseDigit '?' = placeholder
+    parseDigit x   = intToPeano $ digitToInt x
+
+constructProblem :: Term -> Term -> Term -> Goal
+constructProblem pa pb pc = solutiono pa pb pc (Var "a") (Var "b") (Var "c")
 
 getSolution :: PSol -> (Term, Term, Term)
 getSolution (PSol e n) = (fromJust $ lookup "a" e, fromJust $ lookup "b" e, fromJust $ lookup "c" e)
 
-formatNumber :: Term -> String
-formatNumber t = reverse $ map (intToDigit . peanoToInt) $ listToHlist t
+formatPattern :: Term -> String
+formatPattern t = map formatDigit $ reverse $ listToHlist t
+  where
+    formatDigit (Func "?" []) = '?'
+    formatDigit n = intToDigit $ peanoToInt n
 
 formatSolution :: (Term, Term, Term) -> (String, String, String)
-formatSolution (a, b, c) = (formatNumber a, formatNumber b, formatNumber c)
+formatSolution (a, b, c) = (formatPattern a, formatPattern b, formatPattern c)
