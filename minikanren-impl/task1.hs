@@ -66,9 +66,10 @@ solutiono pa pb pc a b c =
 
 ssprob :: Term -> Term -> Term -> Term -> Goal
 ssprob l pa pb pc =
-  fresh $ \a -> fresh $ \b -> fresh $ \c -> lengtho a l &&& lengtho b l &&& sumNumberso a b c &&& lengtho c l &&&
-  matcho pa a &&& matcho pb b &&& matcho pc c &&&
+  lengtho pa l &&& lengtho pb l &&& lengtho pc l &&&  (
+  fresh $ \a -> fresh $ \b -> fresh $ \c -> solutiono pa pb pc a b c &&&
   singleSolution (fresh $ \a -> fresh $ \b -> fresh $ \c -> solutiono pa pb pc a b c)
+  )
 
 parsePattern :: String -> Term
 parsePattern s = hlistToList $ reverse $ map parseDigit s
